@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paul Classes</title>
+
+    <!-- Including Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Including FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+      integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Including Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-plus"></i> New
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <button class="dropdown-item" type="button">New Student</button>
+        <button class="dropdown-item" type="button">New Class</button>
+        <button class="dropdown-item" type="button">New Student Record</button>
+      </div>
+    </div>
+
+    <br>
+
+    <h1 align="center">Paul Classes</h1>
+
+    <br />
+
+    <div
+      class="row"
+    >
+    <div class="col-md-6">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="myChart1"></canvas>
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+      <canvas id="myChart2"></canvas>
+    </div>
+      <div class="col-md-6">
+      <canvas id="myChart3"></canvas>
+    </div>
+    </div>
+
+    <script>
+                var ctx = document.getElementById("myChart");
+                var ctx2 = document.getElementById("myChart2");
+                var ctx3 = document.getElementById("myChart3");
+                var classNames = <%- JSON.stringify(classNames) %>;
+                var absentees = <%- JSON.stringify(absentees) %>;
+                var presentees = <%- JSON.stringify(presentees) %>;
+                var attendancePercentage = [];
+                var totalStudents = [];
+                for(let counter = 0; counter<classNames.length; counter++){
+                    attendancePercentage.push((presentees[counter]*100/(presentees[counter]+absentees[counter])))
+                    totalStudents.push(presentees[counter]+absentees[counter]);
+                }
+                var myChart = new Chart(ctx, {
+                  type: "radar",
+                  data: {
+                    labels: classNames,
+                    datasets: [
+                      {
+                        label: "Absentees",
+                        data: absentees,
+                        fill: true,
+                        backgroundColor: "rgba(255, 99, 132, 0.2)",
+                        borderColor: "rgb(255, 99, 132)",
+                        pointBackgroundColor: "rgb(255, 99, 132)",
+                        pointBorderColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgb(255, 99, 132)",
+                      },
+                      {
+                        label: "Presentees",
+                        data: presentees,
+                        fill: true,
+                        backgroundColor: "rgba(54, 162, 235, 0.2)",
+                        borderColor: "rgb(54, 162, 235)",
+                        pointBackgroundColor: "rgb(54, 162, 235)",
+                        pointBorderColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgb(54, 162, 235)",
+                      },
+                    ],
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                      },
+                    },
+                  },
+                });
+
+
+
+            
+
+
+
+                var myChart = new Chart(ctx2, {
+                  type: "polarArea",
+                  data: {
+                    labels: classNames,
+      datasets: [{
+        label: 'Strength',
+        data: totalStudents,
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(75, 192, 192)',
+          'rgb(255, 205, 86)',
+          'rgb(201, 203, 207)',
+          'rgb(54, 162, 235)'
+        ]
+      }]
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                      },
+                    },
+                  },
+                });
+
+            var ctx1 = document.getElementById('myChart1');
+          var myChart = new Chart(ctx1, {
+              type: 'bar',
+              data: {
+                  labels: classNames,
+                  datasets: [{
+                      label: 'Percentage Attendance',
+                      data: attendancePercentage,
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
+
+          var myChart = new Chart(ctx3, {
+              type: 'line',
+              data: {
+                  labels: classNames,
+  datasets: [{
+    label: 'Absentees',
+    data: absentees,
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
+
+
+    </script>
+  </body>
+</html>
