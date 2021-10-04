@@ -165,7 +165,12 @@ app.post("/saveStudentRecord", (req, res) => {
 
   
   
-  res.send("Data submitted sir");
+  res.render(path.join(__dirname, "/views/Homepage.html"), {
+    classNames: class_names,
+    recentDates: recent_date,
+    absentees: absents_list,
+    presentees: present_list,
+  });
 });
 
 app.put("/page1", (req, res) => {
