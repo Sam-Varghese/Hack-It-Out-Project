@@ -4,6 +4,7 @@ var con = mysql.createConnection({
   user: "root",
   password: "SmAyMsVqAl11597",
   database: "attendance_records",
+  multipleStatements: true,
 });
 
 con.connect((err) => {
@@ -12,15 +13,10 @@ con.connect((err) => {
 });
 
 con.query(
-  `SELECT 
-COLUMN_NAME
-FROM information_schema.COLUMNS 
-WHERE TABLE_SCHEMA = 'Attendance_Records'
-AND TABLE_NAME ='Class1'
-ORDER BY ORDINAL_POSITION DESC 
-LIMIT 1;`,
+  `USE ATTENDANCE_RECORDS;SELECT count(*) as Count FROM information_schema.columns WHERE table_name = 'Class1';`,
   (err, res) => {
     if (err) throw err;
-    console.log(res);
+    console.log("Result: ");
+    console.log(res[1][0].Count);
   }
 );

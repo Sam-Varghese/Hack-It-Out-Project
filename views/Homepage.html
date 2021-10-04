@@ -38,8 +38,20 @@
       referrerpolicy="no-referrer"
     />
 
+    <!-- Google icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
     <!-- Including Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        a{
+            text-decoration: none;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+    </style>
   </head>
   <body>
     <div class="dropdown">
@@ -53,10 +65,32 @@
       >
         <i class="fa-solid fa-plus"></i> New
       </button>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu3"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-pen-to-square"></i> Edit
+      </button>
+      <button
+        class="btn btn-secondary toggle"
+        type="button"
+        id="dropdownMenu4"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+      <i class="fa-solid fa-check-to-slot"></i> Attendance
+      </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <button class="dropdown-item" type="button">New Student</button>
+        <a href="/newStudent"><button class="dropdown-item" type="button">New Student</button></a>
         <button class="dropdown-item" type="button">New Class</button>
-        <button class="dropdown-item" type="button">New Student Record</button>
+      </div>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+        <a href="/newStudent"><button class="dropdown-item" type="button">Edit Student Records</button></a>
+        <button class="dropdown-item" type="button">Edit Attendance Records</button>
       </div>
     </div>
 
@@ -74,6 +108,8 @@
     </div>
     <div class="col-md-6">
       <canvas id="myChart1"></canvas>
+      <canvas id="myChart3"></canvas>
+
     </div>
     </div>
 
@@ -81,9 +117,9 @@
         <div class="col-md-6">
       <canvas id="myChart2"></canvas>
     </div>
-      <div class="col-md-6">
-      <canvas id="myChart3"></canvas>
-    </div>
+      <!-- <div class="col-md-6">
+      <canvas id="myChart4"></canvas>
+    </div> -->
     </div>
 
     <script>
@@ -212,7 +248,13 @@
     label: 'Absentees',
     data: absentees,
     fill: false,
-    borderColor: 'rgb(75, 192, 192)',
+    borderColor: 'rgb(255, 0, 0)',
+    tension: 0.1
+  }, {
+    label: 'Presentees',
+    data: presentees,
+    fill: false,
+    borderColor: 'rgb(0, 255, 255)',
     tension: 0.1
   }]
               },

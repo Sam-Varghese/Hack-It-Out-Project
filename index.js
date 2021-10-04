@@ -11,6 +11,7 @@ var con = mysql.createConnection({
   user: "root",
   password: "SmAyMsVqAl11597",
   database: "attendance_records",
+  multipleStatements: true
 });
 
 con.connect((err) => {
@@ -43,41 +44,40 @@ var absents_list = [];
 var present_list = [];
 
 app.get("/", (req, res) => {
-    // Finding Class Names, Recent Dates
+  // Finding Class Names, Recent Dates
 
-    con.query("SHOW TABLES;", (err, res) => {
-      class_names = [];
-      recent_date = [];
-      absents_list = [];
-      present_list = [];
-      if (err) throw err;
-      res.forEach((ClassNames) => {
-        class_names.push(ClassNames.Tables_in_attendance_records);
-        let k = ClassNames.Tables_in_attendance_records;
-        con.query(
-          `SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'Attendance_Records' AND TABLE_NAME ='${k}' ORDER BY ORDINAL_POSITION DESC LIMIT 1;`,
-          (err, res) => {
-            if (err) throw err;
-            recent_date.push(res[0].COLUMN_NAME);
-            con.query(
-              `SELECT COUNT(*) AS Count FROM ${k} WHERE ${res[0].COLUMN_NAME} = "Absent"`,
-              (err, result) => {
-                if (err) throw err;
-                absents_list.push(result[0].Count);
-              }
-            );
-            con.query(
-              `SELECT COUNT(*) AS Count FROM ${k} WHERE ${res[0].COLUMN_NAME} = "Present"`,
-              (err, result) => {
-                if (err) throw err;
-                present_list.push(result[0].Count);
-              }
-            );
-          }
-        );
-      });
+  con.query("SHOW TABLES;", (err, res) => {
+    class_names = [];
+    recent_date = [];
+    absents_list = [];
+    present_list = [];
+    if (err) throw err;
+    res.forEach((ClassNames) => {
+      class_names.push(ClassNames.Tables_in_attendance_records);
+      let k = ClassNames.Tables_in_attendance_records;
+      con.query(
+        `SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'Attendance_Records' AND TABLE_NAME ='${k}' ORDER BY ORDINAL_POSITION DESC LIMIT 1;`,
+        (err, res) => {
+          if (err) throw err;
+          recent_date.push(res[0].COLUMN_NAME);
+          con.query(
+            `SELECT COUNT(*) AS Count FROM ${k} WHERE ${res[0].COLUMN_NAME} = "Absent"`,
+            (err, result) => {
+              if (err) throw err;
+              absents_list.push(result[0].Count);
+            }
+          );
+          con.query(
+            `SELECT COUNT(*) AS Count FROM ${k} WHERE ${res[0].COLUMN_NAME} = "Present"`,
+            (err, result) => {
+              if (err) throw err;
+              present_list.push(result[0].Count);
+            }
+          );
+        }
+      );
     });
-  
+  });
 
   console.log(class_names);
   console.log(recent_date);
@@ -92,9 +92,80 @@ app.get("/", (req, res) => {
 });
 
 // Backend for /page1
+app.get("/newStudent", (req, res) => {
+  res.render(path.join(__dirname, "/views/NewStudent.html"), {
+    classNames: class_names,
+  });
+});
 
-app.get("/page1", (req, res) => {
-  res.send("This is page1 sir");
+app.post("/saveStudentRecord", (req, res) => {
+  console.log(req.body.Name);
+  console.log(req.body.Class);
+  console.log(req.body.School);
+  console.log(req.body.DOJ);
+  console.log(req.body.MoP);
+  console.log(req.body.Fee);
+
+  function student_record_queries() {
+    con.query("CREATE DATABASE IF NOT EXISTS Student_Records;", (err, res) => {
+      // Not so necessary though
+      if (err) throw err;
+      con.query(`USE Student_Records;`, (err, res) => {
+        if (err) throw err;
+        con.query(
+          `USE Student_Records;CREATE TABLE IF NOT EXISTS Records (Name varchar(50) PRIMARY KEY, Class varchar(20) NOT NULL, School varchar(50) NOT NULL, Date_Of_Joining varchar(25) NOT NULL, Payment_Pattern ENUM('Monthly', 'Yearly'), Fee INT NOT NULL)`,
+          (err, res) => {
+            if (err) throw err;
+            con.query(
+              `USE Student_Records;INSERT INTO Records VALUES("${req.body.Name}", "${req.body.Class}", "${req.body.School}", "${req.body.DOJ}", "${req.body.MoP}", ${req.body.Fee});`,
+              (err, res) => {
+                if (err) throw err;
+              }
+            );
+          }
+        );
+      });
+    });
+  }
+
+  function attendance_queries() {
+    con.query(`USE Attendance_Records;`, (err, res) => {
+      if (err) throw err;
+      console.log(
+        `SELECT count(*) as Count FROM information_schema.columns WHERE table_name = '${req.body.Class}';`
+      );
+      con.query(
+        `USE ATTENDANCE_RECORDS;SELECT count(*) as Count FROM information_schema.columns WHERE table_name = '${req.body.Class}';`,
+        (err, res) => {
+          if (err) throw err;
+          let column_count = res[1][0].Count - 1;
+          let ab = "'Not joined', ";
+          let ab_rep =
+            `'${req.body.Name}', ` +
+            ab.repeat(column_count - 1) +
+            "'Not joined'";
+          console.log(column_count, ab_rep);
+          con.query(
+            `USE ATTENDANCE_RECORDS;INSERT INTO ${req.body.Class} values (${ab_rep})`,
+            (err, res) => {
+              if (err) throw err;
+            }
+          );
+        }
+      );
+    });
+  }
+
+  student_record_queries();
+  attendance_queries();
+
+  // Working on Student_Records Database
+
+  
+
+  
+  
+  res.send("Data submitted sir");
 });
 
 app.put("/page1", (req, res) => {
