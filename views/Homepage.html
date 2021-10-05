@@ -38,19 +38,18 @@
       referrerpolicy="no-referrer"
     />
 
-    <!-- Google icon -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-
     <!-- Including Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        a{
-            text-decoration: none;
-        }
-        a:hover{
-            text-decoration: none;
-        }
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      body {
+        margin: 1vw;
+      }
     </style>
   </head>
   <body>
@@ -82,192 +81,201 @@
         aria-haspopup="true"
         aria-expanded="false"
       >
-      <i class="fa-solid fa-check-to-slot"></i> Attendance
+        <i class="fa-solid fa-check-to-slot"></i> Attendance
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <a href="/newStudent"><button class="dropdown-item" type="button">New Student</button></a>
-        <button class="dropdown-item" type="button">New Class</button>
+        <a href="/newStudent"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-child"></i> New Student
+          </button></a
+        >
+        <a href="/newClass"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-building"></i> New Class
+          </button></a
+        >
       </div>
       <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-        <a href="/newStudent"><button class="dropdown-item" type="button">Edit Student Records</button></a>
-        <button class="dropdown-item" type="button">Edit Attendance Records</button>
+        <a href="/newStudent"
+          ><button class="dropdown-item" type="button">
+            Edit Student Records
+          </button></a
+        >
+        <button class="dropdown-item" type="button">
+          Edit Attendance Records
+        </button>
       </div>
     </div>
 
-    <br>
+    <br />
 
     <h1 align="center">Paul Classes</h1>
 
     <br />
 
-    <div
-      class="row"
-    >
-    <div class="col-md-6">
-      <canvas id="myChart"></canvas>
-    </div>
-    <div class="col-md-6">
-      <canvas id="myChart1"></canvas>
-      <canvas id="myChart3"></canvas>
-
-    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <canvas id="myChart"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="myChart1"></canvas>
+        <canvas id="myChart3"></canvas>
+      </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-      <canvas id="myChart2"></canvas>
-    </div>
+      <div class="col-md-6">
+        <canvas id="myChart2"></canvas>
+      </div>
       <!-- <div class="col-md-6">
       <canvas id="myChart4"></canvas>
     </div> -->
     </div>
 
     <script>
-                var ctx = document.getElementById("myChart");
-                var ctx2 = document.getElementById("myChart2");
-                var ctx3 = document.getElementById("myChart3");
-                var classNames = <%- JSON.stringify(classNames) %>;
-                var absentees = <%- JSON.stringify(absentees) %>;
-                var presentees = <%- JSON.stringify(presentees) %>;
-                var attendancePercentage = [];
-                var totalStudents = [];
-                for(let counter = 0; counter<classNames.length; counter++){
-                    attendancePercentage.push((presentees[counter]*100/(presentees[counter]+absentees[counter])))
-                    totalStudents.push(presentees[counter]+absentees[counter]);
-                }
-                var myChart = new Chart(ctx, {
-                  type: "radar",
+                    var ctx = document.getElementById("myChart");
+                    var ctx2 = document.getElementById("myChart2");
+                    var ctx3 = document.getElementById("myChart3");
+                    var classNames = <%- JSON.stringify(classNames) %>;
+                    var absentees = <%- JSON.stringify(absentees) %>;
+                    var presentees = <%- JSON.stringify(presentees) %>;
+                    var attendancePercentage = [];
+                    var totalStudents = [];
+                    for(let counter = 0; counter<classNames.length; counter++){
+                        attendancePercentage.push((presentees[counter]*100/(presentees[counter]+absentees[counter])))
+                        totalStudents.push(presentees[counter]+absentees[counter]);
+                    }
+                    var myChart = new Chart(ctx, {
+                      type: "radar",
+                      data: {
+                        labels: classNames,
+                        datasets: [
+                          {
+                            label: "Absentees",
+                            data: absentees,
+                            fill: true,
+                            backgroundColor: "rgba(255, 99, 132, 0.2)",
+                            borderColor: "rgb(255, 99, 132)",
+                            pointBackgroundColor: "rgb(255, 99, 132)",
+                            pointBorderColor: "#fff",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgb(255, 99, 132)",
+                          },
+                          {
+                            label: "Presentees",
+                            data: presentees,
+                            fill: true,
+                            backgroundColor: "rgba(54, 162, 235, 0.2)",
+                            borderColor: "rgb(54, 162, 235)",
+                            pointBackgroundColor: "rgb(54, 162, 235)",
+                            pointBorderColor: "#fff",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgb(54, 162, 235)",
+                          },
+                        ],
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                          },
+                        },
+                      },
+                    });
+
+
+
+
+
+
+
+                    var myChart = new Chart(ctx2, {
+                      type: "polarArea",
+                      data: {
+                        labels: classNames,
+          datasets: [{
+            label: 'Strength',
+            data: totalStudents,
+            backgroundColor: [
+              'rgb(255, 99, 132)',
+              'rgb(75, 192, 192)',
+              'rgb(255, 205, 86)',
+              'rgb(201, 203, 207)',
+              'rgb(54, 162, 235)'
+            ]
+          }]
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                          },
+                        },
+                      },
+                    });
+
+                var ctx1 = document.getElementById('myChart1');
+              var myChart = new Chart(ctx1, {
+                  type: 'bar',
                   data: {
-                    labels: classNames,
-                    datasets: [
-                      {
-                        label: "Absentees",
-                        data: absentees,
-                        fill: true,
-                        backgroundColor: "rgba(255, 99, 132, 0.2)",
-                        borderColor: "rgb(255, 99, 132)",
-                        pointBackgroundColor: "rgb(255, 99, 132)",
-                        pointBorderColor: "#fff",
-                        pointHoverBackgroundColor: "#fff",
-                        pointHoverBorderColor: "rgb(255, 99, 132)",
-                      },
-                      {
-                        label: "Presentees",
-                        data: presentees,
-                        fill: true,
-                        backgroundColor: "rgba(54, 162, 235, 0.2)",
-                        borderColor: "rgb(54, 162, 235)",
-                        pointBackgroundColor: "rgb(54, 162, 235)",
-                        pointBorderColor: "#fff",
-                        pointHoverBackgroundColor: "#fff",
-                        pointHoverBorderColor: "rgb(54, 162, 235)",
-                      },
-                    ],
+                      labels: classNames,
+                      datasets: [{
+                          label: 'Percentage Attendance',
+                          data: attendancePercentage,
+                          backgroundColor: [
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(54, 162, 235, 0.2)',
+                              'rgba(255, 206, 86, 0.2)',
+                              'rgba(75, 192, 192, 0.2)',
+                              'rgba(153, 102, 255, 0.2)',
+                              'rgba(255, 159, 64, 0.2)'
+                          ],
+                          borderColor: [
+                              'rgba(255, 99, 132, 1)',
+                              'rgba(54, 162, 235, 1)',
+                              'rgba(255, 206, 86, 1)',
+                              'rgba(75, 192, 192, 1)',
+                              'rgba(153, 102, 255, 1)',
+                              'rgba(255, 159, 64, 1)'
+                          ],
+                          borderWidth: 1
+                      }]
                   },
                   options: {
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                      },
-                    },
-                  },
-                });
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
+                      }
+                  }
+              });
 
-
-
-            
-
-
-
-                var myChart = new Chart(ctx2, {
-                  type: "polarArea",
+              var myChart = new Chart(ctx3, {
+                  type: 'line',
                   data: {
-                    labels: classNames,
+                      labels: classNames,
       datasets: [{
-        label: 'Strength',
-        data: totalStudents,
-        backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(75, 192, 192)',
-          'rgb(255, 205, 86)',
-          'rgb(201, 203, 207)',
-          'rgb(54, 162, 235)'
-        ]
+        label: 'Absentees',
+        data: absentees,
+        fill: false,
+        borderColor: 'rgb(255, 0, 0)',
+        tension: 0.1
+      }, {
+        label: 'Presentees',
+        data: presentees,
+        fill: false,
+        borderColor: 'rgb(0, 255, 255)',
+        tension: 0.1
       }]
                   },
                   options: {
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                      },
-                    },
-                  },
-                });
-
-            var ctx1 = document.getElementById('myChart1');
-          var myChart = new Chart(ctx1, {
-              type: 'bar',
-              data: {
-                  labels: classNames,
-                  datasets: [{
-                      label: 'Percentage Attendance',
-                      data: attendancePercentage,
-                      backgroundColor: [
-                          'rgba(255, 99, 132, 0.2)',
-                          'rgba(54, 162, 235, 0.2)',
-                          'rgba(255, 206, 86, 0.2)',
-                          'rgba(75, 192, 192, 0.2)',
-                          'rgba(153, 102, 255, 0.2)',
-                          'rgba(255, 159, 64, 0.2)'
-                      ],
-                      borderColor: [
-                          'rgba(255, 99, 132, 1)',
-                          'rgba(54, 162, 235, 1)',
-                          'rgba(255, 206, 86, 1)',
-                          'rgba(75, 192, 192, 1)',
-                          'rgba(153, 102, 255, 1)',
-                          'rgba(255, 159, 64, 1)'
-                      ],
-                      borderWidth: 1
-                  }]
-              },
-              options: {
-                  scales: {
-                      y: {
-                          beginAtZero: true
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
                       }
                   }
-              }
-          });
-
-          var myChart = new Chart(ctx3, {
-              type: 'line',
-              data: {
-                  labels: classNames,
-  datasets: [{
-    label: 'Absentees',
-    data: absentees,
-    fill: false,
-    borderColor: 'rgb(255, 0, 0)',
-    tension: 0.1
-  }, {
-    label: 'Presentees',
-    data: presentees,
-    fill: false,
-    borderColor: 'rgb(0, 255, 255)',
-    tension: 0.1
-  }]
-              },
-              options: {
-                  scales: {
-                      y: {
-                          beginAtZero: true
-                      }
-                  }
-              }
-          });
-
-
+              });
     </script>
   </body>
 </html>

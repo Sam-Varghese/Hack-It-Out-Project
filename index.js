@@ -11,7 +11,7 @@ var con = mysql.createConnection({
   user: "root",
   password: "SmAyMsVqAl11597",
   database: "attendance_records",
-  multipleStatements: true
+  multipleStatements: true,
 });
 
 con.connect((err) => {
@@ -46,32 +46,37 @@ var present_list = [];
 app.get("/", (req, res) => {
   // Finding Class Names, Recent Dates
 
-  con.query("SHOW TABLES;", (err, res) => {
+  con.query("USE ATTENDANCE_RECORDS;SHOW TABLES;", (err, res) => {
     class_names = [];
+
     recent_date = [];
     absents_list = [];
     present_list = [];
     if (err) throw err;
-    res.forEach((ClassNames) => {
+    res[1].forEach((ClassNames) => {
       class_names.push(ClassNames.Tables_in_attendance_records);
       let k = ClassNames.Tables_in_attendance_records;
       con.query(
-        `SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'Attendance_Records' AND TABLE_NAME ='${k}' ORDER BY ORDINAL_POSITION DESC LIMIT 1;`,
-        (err, res) => {
+        `USE ATTENDANCE_RECORDS;SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'Attendance_Records' AND TABLE_NAME ='${k}' ORDER BY ORDINAL_POSITION DESC LIMIT 1;`,
+        (err, res1) => {
           if (err) throw err;
-          recent_date.push(res[0].COLUMN_NAME);
+          console.log(class_names);
+          console.log(`Value of date: ${res1[1][0].COLUMN_NAME}`);
+          recent_date.push(res1[1][0].COLUMN_NAME);
+          let recent_class_date = res1[1][0].COLUMN_NAME;
+          console.log(recent_date);
           con.query(
-            `SELECT COUNT(*) AS Count FROM ${k} WHERE ${res[0].COLUMN_NAME} = "Absent"`,
+            `USE ATTENDANCE_RECORDS;SELECT COUNT(*) AS Count FROM ${k} WHERE ${recent_class_date} = "Absent"`,
             (err, result) => {
               if (err) throw err;
-              absents_list.push(result[0].Count);
+              absents_list.push(result[1][0].Count);
             }
           );
           con.query(
-            `SELECT COUNT(*) AS Count FROM ${k} WHERE ${res[0].COLUMN_NAME} = "Present"`,
-            (err, result) => {
+            `USE ATTENDANCE_RECORDS;SELECT COUNT(*) AS Count FROM ${k} WHERE ${recent_class_date} = "Present"`,
+            (err, result1) => {
               if (err) throw err;
-              present_list.push(result[0].Count);
+              present_list.push(result1[1][0].Count);
             }
           );
         }
@@ -140,10 +145,16 @@ app.post("/saveStudentRecord", (req, res) => {
           if (err) throw err;
           let column_count = res[1][0].Count - 1;
           let ab = "'Not joined', ";
-          let ab_rep =
-            `'${req.body.Name}', ` +
-            ab.repeat(column_count - 1) +
-            "'Not joined'";
+          var ab_rep;
+          if (column_count == 0) {
+            ab_rep = `'${req.body.Name}'`;
+          } else {
+            ab_rep =
+              `'${req.body.Name}', ` +
+              ab.repeat(column_count - 1) +
+              "'Not joined'";
+          }
+
           console.log(column_count, ab_rep);
           con.query(
             `USE ATTENDANCE_RECORDS;INSERT INTO ${req.body.Class} values (${ab_rep})`,
@@ -161,20 +172,36 @@ app.post("/saveStudentRecord", (req, res) => {
 
   // Working on Student_Records Database
 
-  
-
-  
-  
-  res.render(path.join(__dirname, "/views/Homepage.html"), {
-    classNames: class_names,
-    recentDates: recent_date,
-    absentees: absents_list,
-    presentees: present_list,
-  });
+  res.redirect("/");
 });
 
-app.put("/page1", (req, res) => {
-  res.send("Got a put request on page1 sir");
+app.get("/newClass", (req, res) => {
+  res.render(path.join(__dirname, "/views/NewClass.html"));
+});
+
+app.post("/newClassForm", (req, res) => {
+  console.log(req.body.Name);
+  console.log(req.body.StudentNames.replace(/\r\n/g, "\n").split("\n"));
+
+  studentsList = req.body.StudentNames.replace(/\r\n/g, "\n").split("\n");
+
+  con.query(
+    `CREATE TABLE IF NOT EXISTS ${req.body.Name} (Students varchar(30));`,
+    (err, res) => {
+      if (err) throw err;
+      studentsList.forEach((element) => {
+        let k = element;
+        con.query(
+          `INSERT INTO ${req.body.Name} VALUES("${k}");`,
+          (err, res) => {
+            if (err) throw err;
+          }
+        );
+      });
+    }
+  );
+
+  res.redirect("/");
 });
 
 app.delete("/page1", (req, res) => {
