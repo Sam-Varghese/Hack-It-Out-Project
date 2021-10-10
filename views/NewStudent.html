@@ -41,9 +41,119 @@
       body {
         margin: 1vw;
       }
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: none;
+      }
     </style>
   </head>
   <body>
+    <div class="btn-group dropdown">
+      <a href="/"
+        ><button
+          class="btn btn-secondary toggle"
+          type="button"
+          id="dropdownMenu4"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-house-chimney"></i> Home
+        </button></a
+      >
+    </div>
+    <div class="btn-group dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-plus"></i> New
+      </button>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <a href="/newStudent"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-child"></i> New Student
+          </button></a
+        >
+        <a href="/newClass"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-building"></i> New Class
+          </button></a
+        >
+      </div>
+    </div>
+
+    <div class="btn-group dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-database"></i> Records
+      </button>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <a href="/attendanceRecordsPage"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-child"></i> Attendance Records
+          </button></a
+        >
+        <a href="/newClass"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-building"></i> Student Records
+          </button></a
+        >
+      </div>
+    </div>
+
+    <div class="btn-group dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu3"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-pen-to-square"></i> Edit
+      </button>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+        <a href="/newStudent"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-calendar-days"></i> Edit Attendance
+          </button></a
+        >
+        <a href="/newClass"
+          ><button class="dropdown-item" type="button">
+            <i class="fa-solid fa-child"></i> Edit Student's records
+          </button></a
+        >
+      </div>
+    </div>
+
+    <div class="btn-group dropdown">
+      <a href="/Attendance"
+        ><button
+          class="btn btn-secondary toggle"
+          type="button"
+          id="dropdownMenu4"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-check-to-slot"></i> Attendance
+        </button></a
+      >
+    </div>
     <h1 align="center">Student Registration</h1>
     <br />
     <form action="/saveStudentRecord" method="POST">
@@ -71,29 +181,34 @@
           name="School"
           class="form-control"
           placeholder="Student's School"
-          autocomplete="off" 
+          autocomplete="off"
           required
         />
       </div>
       <div class="form-group">
-        <label for="DOJ"><i class="fa-solid fa-calendar"></i> Date Of Joining: </label>
-        <input id="DOJ" name="DOJ" class="form-control" type="date" required/>
+        <label for="DOJ"
+          ><i class="fa-solid fa-calendar"></i> Date Of Joining:
+        </label>
+        <input id="DOJ" name="DOJ" class="form-control" type="date" required />
       </div>
       <div class="form-group">
-        <label for="MoP"><i class="fa-solid fa-calendar-xmark"></i> Payment pattern: </label
+        <label for="MoP"
+          ><i class="fa-solid fa-calendar-xmark"></i> Payment pattern: </label
         ><select id="MoP" name="MoP" class="form-control">
           <option value="Monthly">Monthly</option>
           <option value="Yearly">Yearly</option>
         </select>
       </div>
       <div class="form-group">
-        <label for="Fee"><i class="fa-solid fa-money-bill-1-wave"></i> Monthly/ yearly fee: </label>
+        <label for="Fee"
+          ><i class="fa-solid fa-money-bill-1-wave"></i> Monthly/ yearly fee:
+        </label>
         <input
           type="number"
           id="Fee"
           name="Fee"
           class="form-control"
-          placeholder="Only in digits" 
+          placeholder="Only in digits"
           required
         />
       </div>

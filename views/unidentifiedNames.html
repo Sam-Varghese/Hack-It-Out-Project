@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidentified Names</title>
+    <!-- Including Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Including FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+      integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        margin: 1vw;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 align="center">Unidentified Names</h1>
+    <form action="/unidentifiedStudentsForm" method="POST" id="form1">
+      <p id="waste"></p>
+      <input type="submit" value="Submit" class="btn btn-primary" />
+    </form>
+    <script>
+      var unidentifiedNames = <%- JSON.stringify(unidentifiedNames) %>;
+      var students_list = <%- JSON.stringify(allStudents) %>;
+      console.log("Reporting from unidentifiedNames.html");
+      console.log(unidentifiedNames);
+      console.log(students_list);
+      unidentifiedNames.forEach((Name) => {
+        const lab = document.createElement("label");
+        // const node = document.createTextNode(`<br><i class="fa-solid fa-child"></i> Kindly select who the hell ${Name} is: `);
+        // lab.appendChild(node);
+        lab.innerHTML = `<br>Kindly select who the hell <i class="fa-solid fa-child"></i>  ${Name} is: `;
+
+        var select = document.createElement("SELECT");
+        select.setAttribute("id", Name);
+        select.setAttribute("name", Name);
+        select.setAttribute("class", "form-control")
+
+        students_list.forEach((Student) => {
+          var opt = document.createElement("option");
+          opt.value = Student;
+          opt.innerHTML = Student;
+          select.appendChild(opt);
+        })
+
+        const element = document.getElementById("form1");
+        const child = document.getElementById("waste");
+
+        element.insertBefore(lab, child);
+        element.insertBefore(select, child);
+      })
+    </script>
+  </body>
+</html>

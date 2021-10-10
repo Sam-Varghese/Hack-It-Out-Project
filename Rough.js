@@ -12,10 +12,9 @@ con.connect((err) => {
   console.log("Connected");
 });
 
-var array1 = [];
-con.query(
-  `USE ATTENDANCE_RECORDS;SELECT COUNT(*) AS Count FROM class1 WHERE 24_08_2021 = "Absent"`,
-  (err, res) => {
-    console.log(res);
-  }
-);
+var column_names = [];
+con.query(`SELECT * FROM Class1;`, (err, res) => {
+  // console.log(res);
+  res = JSON.stringify(res);
+  console.log(res);
+});

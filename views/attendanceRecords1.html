@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Class Registration</title>
+    <title>Attendance Records</title>
     <!-- Including Bootstrap -->
     <link
       rel="stylesheet"
@@ -36,15 +36,18 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+
+
+
     <style>
-      body {
-        margin: 1vw;
-      }
       a {
         text-decoration: none;
       }
       a:hover {
         text-decoration: none;
+      }
+      body {
+        margin: 1vw;
       }
     </style>
   </head>
@@ -153,35 +156,28 @@
         </button></a
       >
     </div>
-    <h1 align="center">New Class</h1>
-
-    <form action="/newClassForm" method="POST">
-      <div class="form-group">
-        <label for="Name"
-          ><i class="fa-solid fa-building"></i> Class name:
-        </label>
-        <input
-          type="text"
-          id="Name"
-          name="Name"
-          class="form-control"
-          placeholder="Class names should be unique"
-          autocomplete="off"
-        />
-        <br />
-        <label for="StudentNames"
-          ><i class="fa-solid fa-child"></i> Names of students:
-        </label>
-        <textarea
-          name="StudentNames"
-          id="StudentNames"
-          cols="30"
-          rows="10"
-          class="form-control"
-        ></textarea>
-        <br />
-        <input type="submit" value="Create" class="btn btn-primary" />
-      </div>
+    <h1 align="center">Attendance Records</h1>
+    <form action="/attendanceRecordsPageSubmit" method="POST">
+    <div class="form-group">
+      <label for="Class"
+        ><i class="fa-solid fa-building"></i> Class Name:
+      </label>
+      <select class="form-control" id="Class" name="Class"></select>
+      <br />
+      <input type="submit" value="Submit" class="btn btn-primary" />
+      <br>
+    </div>
     </form>
+    <script>
+      var classNames = <%- JSON.stringify(classNames) %>;
+      var select_class = document.getElementById("Class");
+      classNames.forEach((element) => {
+        var opt = document.createElement("option");
+        opt.value = element;
+        opt.innerHTML = element;
+        select_class.appendChild(opt);
+      })
+
+    </script>
   </body>
 </html>
