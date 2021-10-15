@@ -13,8 +13,10 @@ con.connect((err) => {
 });
 
 var column_names = [];
-con.query(`SELECT * FROM Class1;`, (err, res) => {
-  // console.log(res);
-  res = JSON.stringify(res);
-  console.log(res);
-});
+con.query(
+  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='attendance_records' AND TABLE_NAME='class1';",
+  (err, res) => {
+    if (err) throw err;
+    console.log(res);
+  }
+);

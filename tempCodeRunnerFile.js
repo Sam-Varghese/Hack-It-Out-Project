@@ -1,1 +1,1 @@
-USE ATTENDANCE_RECORDS; SELECT count(*) AS Count FROM information_schema.columns WHERE table_name='class1'
+SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='attendance_records' AND TABLE_NAME='class1';

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Student</title>
+    <title>Edit Attendance Records</title>
 
     <!-- Including Bootstrap -->
     <link
@@ -37,15 +37,25 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!-- Including Tabulator -->
+    <link
+      href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css"
+      rel="stylesheet"
+    />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"
+    ></script>
+
     <style>
-      body {
-        margin: 1vw;
-      }
       a {
         text-decoration: none;
       }
       a:hover {
         text-decoration: none;
+      }
+      body {
+        margin: 1vw;
       }
     </style>
   </head>
@@ -169,74 +179,73 @@
       </div>
     </div>
     <br />
-    <h1 align="center">Student Registration</h1>
-    <br />
-    <form action="/saveStudentRecord" method="POST">
+    <h1 align="center"><%= className%></h1>
+
+    <form action="/editAttendanceRecords" method="POST">
       <div class="form-group">
-        <label for="Name"><i class="fa-solid fa-child"></i> Name: </label>
-        <input
-          type="text"
-          class="form-control"
-          id="Name"
-          name="Name"
-          placeholder="Name should be unique"
-          autocomplete="off"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="Class"><i class="fa-solid fa-building"></i> Class: </label>
-        <select id="Class" name="Class" class="form-control"></select>
-      </div>
-      <div class="form-group">
-        <label for="School"><i class="fa-solid fa-city"></i> School: </label>
-        <input
-          type="text"
-          id="School"
-          name="School"
-          class="form-control"
-          placeholder="Student's School"
-          autocomplete="off"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="DOJ"
-          ><i class="fa-solid fa-calendar"></i> Date Of Joining:
+        <label for="Students"
+          ><i class="fa-solid fa-child"></i> Student:
         </label>
-        <input id="DOJ" name="DOJ" class="form-control" type="date" required />
+
+        <select name="Students" id="Students" class="form-control"></select>
       </div>
+
       <div class="form-group">
-        <label for="MoP"
-          ><i class="fa-solid fa-calendar-xmark"></i> Payment pattern: </label
-        ><select id="MoP" name="MoP" class="form-control">
-          <option value="Monthly">Monthly</option>
-          <option value="Yearly">Yearly</option>
+        <label for="Date">Date: </label>
+        <select name="Date" id="Date" class="form-control"></select>
+      </div>
+
+      <div class="form-group">
+        <label for="Status">Status: </label>
+        <select class="form-control" id="Status" name="Status">
+          <option value="Not joined">Not joined</option>
+          <option value="Absent">Absent</option>
+          <option value="Present">Present</option>
         </select>
       </div>
-      <div class="form-group">
-        <label for="Fee"
-          ><i class="fa-solid fa-money-bill-1-wave"></i> Monthly/ yearly fee:
-        </label>
-        <input
-          type="number"
-          id="Fee"
-          name="Fee"
-          class="form-control"
-          placeholder="Only in digits"
-          required
-        />
-      </div>
+      <input type="hidden" name="className" id="className" value=<%= className%>>
+      <br />
       <input type="submit" value="Submit" class="btn btn-primary" />
     </form>
+
+    <br />
+
+    <div id="example-table"></div>
     <script>
-      var classNames = <%- JSON.stringify(classNames) %>;
-      var select_class = document.getElementById("Class");
-      classNames.forEach((element) => {
+            var tabledata = <%- classData %>;
+            console.log(tabledata);
+
+            var table = new Tabulator("#example-table", {
+                    // height:"69.5vh",
+            data:tabledata, //assign data to table
+            autoColumns:true, //create columns from data field names
+            columns: [
+                {title: "Students", field: "Students", width: 150, hozAlign: "center"}
+            ],
+            pagination:"local",       //paginate the data
+      paginationSize:15,
+      history: true,
+      movableColumns:true,      //allow column order to be changed
+      resizableRows:true,
+      tooltips:true,
+        });
+
+      var studentNames = <%- JSON.stringify(studentNames) %>;
+      var select_class = document.getElementById("Students");
+      studentNames.forEach((element) => {
         var opt = document.createElement("option");
         opt.value = element;
         opt.innerHTML = element;
         select_class.appendChild(opt);
+      })
+
+      var dates = <%- JSON.stringify(columnNames) %>;
+      var select_date = document.getElementById("Date");
+      dates.forEach((element) => {
+        var opt = document.createElement("option");
+        opt.value = element;
+        opt.innerHTML = element;
+        select_date.appendChild(opt);
       })
     </script>
   </body>

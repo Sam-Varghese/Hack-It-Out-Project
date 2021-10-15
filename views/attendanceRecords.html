@@ -63,110 +63,125 @@
     </style>
   </head>
   <body>
-    <div class="btn-group dropdown">
-      <a href="/"
-        ><button
-          class="btn btn-secondary toggle"
+    <div style="display: flex; justify-content: center">
+      <div class="btn-group dropdown" style="margin-right: 1vw">
+        <a href="/"
+          ><button
+            class="btn btn-secondary toggle"
+            type="button"
+            id="dropdownMenu4"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fa-solid fa-house-chimney"></i> Home
+          </button></a
+        >
+      </div>
+      <div class="btn-group dropdown" style="margin-right: 1vw">
+        <button
+          class="btn btn-secondary dropdown-toggle"
           type="button"
-          id="dropdownMenu4"
+          id="dropdownMenu2"
+          data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i class="fa-solid fa-house-chimney"></i> Home
-        </button></a
-      >
-    </div>
-    <div class="btn-group dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="dropdownMenu2"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <i class="fa-solid fa-plus"></i> New
-      </button>
+          <i class="fa-solid fa-plus"></i> New
+        </button>
 
-      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <a href="/newStudent"
-          ><button class="dropdown-item" type="button">
-            <i class="fa-solid fa-child"></i> New Student
-          </button></a
+        <div
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenu2"
+          style="margin-right: 1vw"
         >
-        <a href="/newClass"
-          ><button class="dropdown-item" type="button">
-            <i class="fa-solid fa-building"></i> New Class
-          </button></a
-        >
+          <a href="/newStudent"
+            ><button class="dropdown-item" type="button">
+              <i class="fa-solid fa-child"></i> New Student
+            </button></a
+          >
+          <a href="/newClass"
+            ><button class="dropdown-item" type="button">
+              <i class="fa-solid fa-building"></i> New Class
+            </button></a
+          >
+        </div>
       </div>
-    </div>
 
-    <div class="btn-group dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="dropdownMenu2"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <i class="fa-solid fa-database"></i> Records
-      </button>
-
-      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <a href="/attendanceRecordsPage"
-          ><button class="dropdown-item" type="button">
-            <i class="fa-solid fa-child"></i> Attendance Records
-          </button></a
-        >
-        <a href="/newClass"
-          ><button class="dropdown-item" type="button">
-            <i class="fa-solid fa-building"></i> Student Records
-          </button></a
-        >
-      </div>
-    </div>
-
-    <div class="btn-group dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="dropdownMenu3"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <i class="fa-solid fa-pen-to-square"></i> Edit
-      </button>
-
-      <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-        <a href="/newStudent"
-          ><button class="dropdown-item" type="button">
-            <i class="fa-solid fa-calendar-days"></i> Edit Attendance
-          </button></a
-        >
-        <a href="/newClass"
-          ><button class="dropdown-item" type="button">
-            <i class="fa-solid fa-child"></i> Edit Student's records
-          </button></a
-        >
-      </div>
-    </div>
-
-    <div class="btn-group dropdown">
-      <a href="/Attendance"
-        ><button
-          class="btn btn-secondary toggle"
+      <div class="btn-group dropdown" style="margin-right: 1vw">
+        <button
+          class="btn btn-secondary dropdown-toggle"
           type="button"
-          id="dropdownMenu4"
+          id="dropdownMenu2"
+          data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <i class="fa-solid fa-check-to-slot"></i> Attendance
-        </button></a
-      >
+          <i class="fa-solid fa-database"></i> Records
+        </button>
+
+        <div
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenu2"
+          style="margin-right: 1vw"
+        >
+          <a href="/attendanceRecordsPage"
+            ><button class="dropdown-item" type="button">
+              <i class="fa-solid fa-child"></i> Attendance Records
+            </button></a
+          >
+          <a href="/studentRecordsForm"
+            ><button class="dropdown-item" type="button">
+              <i class="fa-solid fa-building"></i> Student Records
+            </button></a
+          >
+        </div>
+      </div>
+
+      <div class="btn-group dropdown" style="margin-right: 1vw">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenu3"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-pen-to-square"></i> Edit
+        </button>
+
+        <div
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenu3"
+          style="margin-right: 1vw"
+        >
+          <a href="/editAttendance"
+            ><button class="dropdown-item" type="button">
+              <i class="fa-solid fa-calendar-days"></i> Edit Attendance
+            </button></a
+          >
+          <a href="/newClass"
+            ><button class="dropdown-item" type="button">
+              <i class="fa-solid fa-child"></i> Edit Student's records
+            </button></a
+          >
+        </div>
+      </div>
+
+      <div class="btn-group dropdown" style="margin-right: 1vw">
+        <a href="/Attendance"
+          ><button
+            class="btn btn-secondary toggle"
+            type="button"
+            id="dropdownMenu4"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fa-solid fa-check-to-slot"></i> Attendance
+          </button></a
+        >
+      </div>
     </div>
+    <br />
     <h1 align="center"><%= className%></h1>
     <div id="example-table"></div>
     <script>

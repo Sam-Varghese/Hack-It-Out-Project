@@ -54,6 +54,7 @@ var Students1 = [];
 var columnCount;
 var query;
 var sql_data = [];
+var studentNames = [];
 
 app.get("/", (req, res) => {
   // Finding Class Names, Recent Dates
@@ -319,24 +320,25 @@ app.post("/unidentifiedStudentsForm", (req, res) => {
   console.log(className);
   // Finding column names
   con.query(
-    `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='attendance_records' AND TABLE_NAME='${className}';`, (err, res) => {
+    `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='attendance_records' AND TABLE_NAME='${className}';`,
+    (err, res) => {
       if (err) throw err;
       res.forEach((columnName) => {
         let column_name = columnName;
         column_names.push(columnName.COLUMN_NAME);
-      })
+      });
       if (column_names.includes(Date)) {
         console.log(`Date ${Date} already exists sir.`);
         query = `USE ATTENDANCE_RECORDS; UPDATE ${className} SET ${Date}='Absent';`;
         con.query(query, (err, res) => {
           if (err) throw err;
-        })
+        });
       } else {
         console.log(`Date ${Date} does not exists sir.`);
         query = `USE Attendance_Records; ALTER TABLE ${className} ADD COLUMN ${Date} ENUM('Absent', 'Present', 'Not joined') DEFAULT 'Absent';`;
         con.query(query, (err, res) => {
           if (err) throw err;
-        })
+        });
       }
       columnCount = column_names.length;
       for (var Name in req.body) {
@@ -344,38 +346,47 @@ app.post("/unidentifiedStudentsForm", (req, res) => {
         if (req.body[studentName] == "New student") {
           var expression =
             "'" +
-            studentName +"'"+
+            studentName +
+            "'" +
             ", 'Not joined'".repeat(columnCount - 2) +
             ", 'Present'";
-          con.query(`INSERT INTO ${className} VALUES (${expression});`, (err, res) => {
-            if (err) throw err;
-            console.log(`Student named ${studentName} added to ${className}`);
-          });
+          con.query(
+            `INSERT INTO ${className} VALUES (${expression});`,
+            (err, res) => {
+              if (err) throw err;
+              console.log(`Student named ${studentName} added to ${className}`);
+            }
+          );
         } else if (req.body[studentName] == "Ignore") {
-          
         } else {
-          con.query(`UPDATE ${className} SET ${Date}='Present' WHERE Students = '${req.body[studentName]}';`, (err, res) => {
-            if (err) throw err;
-            console.log(`Attendance of ${studentName} who is ${req.body[studentName]} marked successfully.`);
-          })
+          con.query(
+            `UPDATE ${className} SET ${Date}='Present' WHERE Students = '${req.body[studentName]}';`,
+            (err, res) => {
+              if (err) throw err;
+              console.log(
+                `Attendance of ${studentName} who is ${req.body[studentName]} marked successfully.`
+              );
+            }
+          );
         }
       }
       Students.forEach((Student) => {
         if (Student in req.body == false) {
           let k = Student;
           con.query(
-            `UPDATE ${className} SET ${Date} = 'Present' WHERE Students = '${k}';`, (err, res) => {
+            `UPDATE ${className} SET ${Date} = 'Present' WHERE Students = '${k}';`,
+            (err, res) => {
               if (err) throw err;
               console.log(`Attendance of ${k} marked sir.`);
             }
           );
         }
-      })
+      });
     }
   );
   res.redirect("/");
-})
-  
+});
+
 app.post("/newClassForm", (req, res) => {
   console.log(req.body.Name);
   className = _.camelCase(req.body.Name);
@@ -405,12 +416,12 @@ app.get("/attendanceRecordsPage", (req, response) => {
     if (err) throw err;
     res.forEach((classNames) => {
       class_names.push(_.startCase(classNames.Tables_in_attendance_records));
-    })
+    });
     response.render(path.join(__dirname, "/views/attendanceRecords1.html"), {
       classNames: class_names,
     });
-  })
-})
+  });
+});
 
 app.post("/attendanceRecordsPageSubmit", (req, res) => {
   className = _.replace(req.body.Class, " ", ""); // Beware, this may also cause errors
@@ -418,12 +429,170 @@ app.post("/attendanceRecordsPageSubmit", (req, res) => {
   con.query(`SELECT * FROM ${className};`, (error, result) => {
     if (error) throw error;
     result = JSON.stringify(result);
+
+    
+
     // console.log(result);
     res.render(path.join(__dirname, "/views/attendanceRecords.html"), {
       classData: result,
-      className: _.startCase(className)
+      className: _.startCase(className),
     });
+  });
+});
+
+app.get("/studentRecordsForm", (req, res) => {
+  const myPromise1 = new Promise((resolve, reject) => {
+    class_names = [];
+    studentNames = [];
+
+    con.query(`SHOW TABLES;`, (error, result) => {
+      if (error) throw error;
+      result.forEach((className) => {
+        let k = className.Tables_in_attendance_records;
+        class_names.push(k);
+      });
+      console.log("Class names from promise 1: ");
+      console.log(class_names);
+      if (class_names.length != 0) {
+        console.log("Class names promise successfully resolved sir.");
+        resolve(class_names);
+      } else {
+        console.log("Class names promise rejected sir");
+        reject("Class names promises rejected sir");
+      }
+    });
+  });
+
+  myPromise1.then(
+    (data) => {
+      const myPromise = new Promise((resolve, reject) => {
+        console.log("From inside the promise");
+        console.log(class_names);
+
+        class_names.forEach((className) => {
+          let tempArray = [];
+          con.query(`SELECT Students FROM ${className};`, (error1, result1) => {
+            if (error1) throw error1;
+            result1.forEach((student) => {
+              studentNames.push(student.Students);
+              console.log(student.Students);
+            });
+          });
+        });
+
+        if (studentNames.length != 0) {
+          console.log("Student name promise resolved sir.");
+          resolve(studentNames);
+        } else {
+          console.log("Student name promise rejected sir");
+          reject("Promise rejected sir");
+        }
+      });
+
+      myPromise.then(
+        (value) => {
+          console.log(
+            "From out promise, promise resolved sir, here's the data: "
+          );
+          console.log(value);
+          res.render(path.join(__dirname, "/views/studentRecordForm.html"), {
+            studentNames: value,
+          });
+        },
+        (value) => {
+          console.log("From outside promise, rejected sir.");
+          res.redirect("/");
+        }
+      );
+    },
+    (data) => {
+      console.log("Student name task failed successfully");
+    }
+  );
+});
+
+app.get("/editAttendance", (req, res) => {
+  class_names = [];
+  con.query("SHOW TABLES;", (err, result) => {
+    result.forEach((className) => {
+      class_names.push(_.startCase(className.Tables_in_attendance_records));
+    });
+  res.render(path.join(__dirname, "/views/edit.html"), {
+    classNames: class_names,
+  });
+  });
+
+
+});
+
+app.post("/getEditAttendanceRecords", (req, res) => {
+
+  className = _.replace(req.body.ClassName, " ", ""); // Beware, this may also cause errors
+  studentNames = [];
+  column_names = [];
+  sql_data = [];
+  con.query(`SELECT * FROM ${className};`, (error, result) => {
+    if (error) throw error;
+    result = JSON.stringify(result);
+
+    con.query(`SELECT Students FROM ${className};`, (error1, result1) => {
+      if (error1) throw error1;
+      result1.forEach((student) => {
+        studentNames.push(student.Students);
+      });
+
+      con.query(
+        `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='attendance_records' AND TABLE_NAME='class1';`,
+        (error2, result2) => {
+          if (error2) throw error2;
+          result2.forEach((columnNames) => {
+            if (columnNames.COLUMN_NAME != "Students") {
+              column_names.push(columnNames.COLUMN_NAME.replace(/_/g, "-"));
+            }
+          });
+
+          console.log(studentNames);
+          console.log(column_names);
+          res.render(
+            path.join(__dirname, "/views/editAttendanceRecords.html"),
+            {
+              classData: result,
+              className: _.startCase(className),
+              studentNames: studentNames, 
+              columnNames: column_names
+            }
+          );
+        }
+      );
+
+        }
+      );
+
+    
+
+
+    // console.log(result);
+    
+  });
+
+})
+
+app.post("/editAttendanceRecords", (req, res) => {
+  var student = req.body.Students;
+  var date = req.body.Date.replace(/-/g, "_");
+  var status = req.body.Status;
+
+  console.log("From edit attendance form: ");
+  console.log(student);
+  console.log(date);
+  console.log(status);
+  console.log(className);
+
+  con.query(`UPDATE ${className} SET ${date} = '${status}' WHERE Students = '${student}';`, (err, result) => {
+    if (err) throw err;
+    res.redirect("/");
   })
+
 })
 
 app.delete("/page1", (req, res) => {

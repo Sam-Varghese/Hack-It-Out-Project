@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Student</title>
-
+    <title>Student Records</title>
     <!-- Including Bootstrap -->
     <link
       rel="stylesheet"
@@ -38,14 +37,14 @@
       referrerpolicy="no-referrer"
     />
     <style>
-      body {
-        margin: 1vw;
-      }
       a {
         text-decoration: none;
       }
       a:hover {
         text-decoration: none;
+      }
+      body {
+        margin: 1vw;
       }
     </style>
   </head>
@@ -169,70 +168,23 @@
       </div>
     </div>
     <br />
-    <h1 align="center">Student Registration</h1>
-    <br />
-    <form action="/saveStudentRecord" method="POST">
+    <h1 align="center">Student Records</h1>
+    <form action="">
       <div class="form-group">
-        <label for="Name"><i class="fa-solid fa-child"></i> Name: </label>
-        <input
-          type="text"
+        <label for="studentName">Student name: </label>
+        <select
           class="form-control"
-          id="Name"
-          name="Name"
-          placeholder="Name should be unique"
-          autocomplete="off"
-          required
-        />
+          id="studentName"
+          name="studentName"
+        ></select>
       </div>
-      <div class="form-group">
-        <label for="Class"><i class="fa-solid fa-building"></i> Class: </label>
-        <select id="Class" name="Class" class="form-control"></select>
-      </div>
-      <div class="form-group">
-        <label for="School"><i class="fa-solid fa-city"></i> School: </label>
-        <input
-          type="text"
-          id="School"
-          name="School"
-          class="form-control"
-          placeholder="Student's School"
-          autocomplete="off"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="DOJ"
-          ><i class="fa-solid fa-calendar"></i> Date Of Joining:
-        </label>
-        <input id="DOJ" name="DOJ" class="form-control" type="date" required />
-      </div>
-      <div class="form-group">
-        <label for="MoP"
-          ><i class="fa-solid fa-calendar-xmark"></i> Payment pattern: </label
-        ><select id="MoP" name="MoP" class="form-control">
-          <option value="Monthly">Monthly</option>
-          <option value="Yearly">Yearly</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="Fee"
-          ><i class="fa-solid fa-money-bill-1-wave"></i> Monthly/ yearly fee:
-        </label>
-        <input
-          type="number"
-          id="Fee"
-          name="Fee"
-          class="form-control"
-          placeholder="Only in digits"
-          required
-        />
-      </div>
-      <input type="submit" value="Submit" class="btn btn-primary" />
     </form>
     <script>
-      var classNames = <%- JSON.stringify(classNames) %>;
-      var select_class = document.getElementById("Class");
-      classNames.forEach((element) => {
+      var studentNames = <%- JSON.stringify(studentNames) %>;
+      console.log("From student record forms");
+      console.log(studentNames);
+      var select_class = document.getElementById("studentName");
+      studentNames.forEach((element) => {
         var opt = document.createElement("option");
         opt.value = element;
         opt.innerHTML = element;
