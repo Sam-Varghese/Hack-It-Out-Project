@@ -2,7 +2,7 @@
 
 <hr>
 
-![alt](Images/img1.PNG)
+![alt](Images/img1.png)
 
 <hr>
 
