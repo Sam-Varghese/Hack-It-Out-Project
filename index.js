@@ -595,6 +595,21 @@ app.post("/editAttendanceRecords", (req, res) => {
 
 })
 
+app.get("/studentsRecordsForm1", (req, res) => {
+
+  class_names = [];
+  con.query(`SHOW TABLES;`, (err, result1) => {
+    if (err) throw err;
+    result1.forEach((tableName) => {
+      class_names.push(_.startCase(tableName.Tables_in_attendance_records));
+    })
+    res.render(path.join(__dirname, "/views/studentsRecordsForm.html"), {
+      classNames: class_names
+    });
+  })
+
+})
+
 app.delete("/page1", (req, res) => {
   res.send("Got a delete request on page1 sir");
 });
